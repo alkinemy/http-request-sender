@@ -1,0 +1,3 @@
+rootProject.name = 'http-request-sender'
+
+include 'server', 'client'
