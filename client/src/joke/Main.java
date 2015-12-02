@@ -1,4 +1,4 @@
-package joke.http;
+package joke;
 
 public class Main {
 	public static void main(String[] args) {

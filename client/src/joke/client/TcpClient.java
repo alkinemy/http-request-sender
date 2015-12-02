@@ -1,4 +1,7 @@
-package joke.http.client;
+package joke.client;
+
+import joke.request.Request;
+import joke.response.Response;
 
 import java.io.Closeable;
 import java.io.DataOutputStream;
@@ -6,20 +9,12 @@ import java.io.IOException;
 import java.net.Socket;
 
 public class TcpClient {
-	private final String address;
-	private final int port;
-
-	public TcpClient(String address, int port) {
-		this.address = address;
-		this.port = port;
-	}
-
-	public void connectAndSend(Object obj) {
+	public Response connectAndSend(Request request) {
 		DataOutputStream outputStream = null;
-		try (Socket socket = new Socket(address, port)) {
+		try (Socket socket = new Socket(request.getAddress(), request.getPort())) {
 			outputStream = new DataOutputStream(socket.getOutputStream());
 
-			outputStream.writeUTF(obj.toString());
+			outputStream.writeUTF(request.getMessage());
 
 			outputStream.flush();
 			outputStream.close();
@@ -28,6 +23,8 @@ public class TcpClient {
 		} finally {
 			closeQuietly(outputStream);
 		}
+
+		return null; //TODO Response를 리턴하도록 처리
 	}
 
 	private void closeQuietly(Closeable closeable) {
