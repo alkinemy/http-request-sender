@@ -1,4 +1,7 @@
 package joke.request.http.header;
 
-public class EntityHeader {
+public class EntityHeader implements HttpHeaderComponent {
+	@Override public String buildHeader() {
+		return null;
+	}
 }

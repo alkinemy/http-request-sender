@@ -7,7 +7,7 @@ public class HttpStartLine implements HttpRequestComponent {
 	private String target;
 	private HttpVersion version;
 
-	@Override public String buildMessage() {
+	@Override public String buildComponent() {
 		StringBuilder message = new StringBuilder();
 		message.append(method.name()).append(" ")
 			.append(target).append(" ")

@@ -1,4 +1,7 @@
 package joke.request.http.header;
 
-public class ResponseHeader {
+public class ResponseHeader implements HttpHeaderComponent {
+	@Override public String buildHeader() {
+		return null;
+	}
 }

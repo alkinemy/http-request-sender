@@ -28,11 +28,11 @@ public class HttpRequest implements Request {
 
 	@Override public String getMessage() {
 		StringBuilder request = new StringBuilder();
-		request.append(startLine.buildMessage())
+		request.append(startLine.buildComponent())
 			.append(System.lineSeparator())
-			.append(header.buildMessage())
+			.append(header.buildComponent())
 			.append(System.lineSeparator())
-			.append(payload.buildMessage());
+			.append(payload.buildComponent());
 		return request.toString();
 	}
 
