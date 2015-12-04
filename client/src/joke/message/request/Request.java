@@ -1,4 +1,4 @@
-package joke.request;
+package joke.message.request;
 
 public interface Request {
 	String getAddress();

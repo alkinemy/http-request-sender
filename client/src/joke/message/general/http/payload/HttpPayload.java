@@ -1,6 +1,6 @@
-package joke.request.http.payload;
+package joke.message.general.http.payload;
 
-import joke.request.http.HttpRequestComponent;
+import joke.message.request.http.HttpRequestComponent;
 
 public class HttpPayload implements HttpRequestComponent {
 	@Override public String buildComponent() {

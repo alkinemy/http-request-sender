@@ -1,7 +1,7 @@
 package joke.client;
 
-import joke.request.http.HttpRequest;
-import joke.response.http.HttpResponse;
+import joke.message.request.http.HttpRequest;
+import joke.message.response.http.HttpResponse;
 
 public class HttpClient {
 	private TcpClient client;

@@ -1,7 +1,7 @@
 package joke.client;
 
-import joke.request.Request;
-import joke.response.Response;
+import joke.message.request.Request;
+import joke.message.response.Response;
 
 import java.io.Closeable;
 import java.io.DataOutputStream;

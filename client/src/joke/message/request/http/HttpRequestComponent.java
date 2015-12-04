@@ -1,4 +1,4 @@
-package joke.request.http;
+package joke.message.request.http;
 
 public interface HttpRequestComponent {
 	String buildComponent();

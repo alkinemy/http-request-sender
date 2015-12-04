@@ -1,4 +1,4 @@
-package joke.request.http.startline;
+package joke.message.request.http.startline;
 
 public enum HttpVersion {
 	HTTP_1_0("HTTP/1.0"),

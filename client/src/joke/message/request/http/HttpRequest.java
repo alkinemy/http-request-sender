@@ -1,11 +1,11 @@
-package joke.request.http;
+package joke.message.request.http;
 
-import joke.request.Request;
-import joke.request.http.header.HttpHeader;
-import joke.request.http.payload.HttpPayload;
-import joke.request.http.startline.HttpMethod;
-import joke.request.http.startline.HttpStartLine;
-import joke.request.http.startline.HttpVersion;
+import joke.message.request.Request;
+import joke.message.request.http.header.HttpHeader;
+import joke.message.general.http.payload.HttpPayload;
+import joke.message.request.http.startline.HttpMethod;
+import joke.message.request.http.startline.HttpStartLine;
+import joke.message.request.http.startline.HttpVersion;
 
 import java.util.Objects;
 

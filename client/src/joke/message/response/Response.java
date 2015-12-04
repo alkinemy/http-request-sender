@@ -1,4 +1,4 @@
-package joke.response;
+package joke.message.response;
 
 public interface Response {
 }

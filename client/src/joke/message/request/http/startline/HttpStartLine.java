@@ -1,6 +1,6 @@
-package joke.request.http.startline;
+package joke.message.request.http.startline;
 
-import joke.request.http.HttpRequestComponent;
+import joke.message.request.http.HttpRequestComponent;
 
 public class HttpStartLine implements HttpRequestComponent {
 	private HttpMethod method;

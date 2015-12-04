@@ -1,6 +1,6 @@
-package joke.request.http.header;
+package joke.message.request.http.header;
 
-import joke.request.http.HttpRequestComponent;
+import joke.message.request.http.HttpRequestComponent;
 
 public class HttpHeader implements HttpRequestComponent {
 	private GeneralHeader general;
