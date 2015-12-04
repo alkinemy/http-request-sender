@@ -1,8 +1,8 @@
 package joke.request.http.payload;
 
-import joke.request.http.HttpRequestPotion;
+import joke.request.http.HttpRequestComponent;
 
-public class HttpPayload implements HttpRequestPotion {
+public class HttpPayload implements HttpRequestComponent {
 	@Override public String buildMessage() {
 		//TODO 구현
 		return null;

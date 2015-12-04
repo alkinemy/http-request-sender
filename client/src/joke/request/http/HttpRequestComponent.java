@@ -1,5 +1,5 @@
 package joke.request.http;
 
-public interface HttpRequestPotion {
+public interface HttpRequestComponent {
 	String buildMessage();
 }

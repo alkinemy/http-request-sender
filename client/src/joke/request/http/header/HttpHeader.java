@@ -1,8 +1,8 @@
 package joke.request.http.header;
 
-import joke.request.http.HttpRequestPotion;
+import joke.request.http.HttpRequestComponent;
 
-public class HttpHeader implements HttpRequestPotion {
+public class HttpHeader implements HttpRequestComponent {
 	private GeneralHeader general;
 	private RequestHeader request;
 	private ResponseHeader response;

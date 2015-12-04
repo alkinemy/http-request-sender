@@ -1,11 +1,19 @@
 package joke.request.http.startline;
 
-import joke.request.http.HttpRequestPotion;
+import joke.request.http.HttpRequestComponent;
 
-public class HttpStartLine implements HttpRequestPotion {
+public class HttpStartLine implements HttpRequestComponent {
 	private HttpMethod method;
 	private String target;
 	private HttpVersion version;
+
+	@Override public String buildMessage() {
+		StringBuilder message = new StringBuilder();
+		message.append(method.name()).append(" ")
+			.append(target).append(" ")
+			.append(version.getVersion());
+		return message.toString();
+	}
 
 	public HttpVersion getVersion() {
 		return version;
@@ -29,13 +37,5 @@ public class HttpStartLine implements HttpRequestPotion {
 
 	public void setMethod(HttpMethod method) {
 		this.method = method;
-	}
-
-	@Override public String buildMessage() {
-		StringBuilder message = new StringBuilder();
-		message.append(method.name()).append(" ")
-			.append(target).append(" ")
-			.append(version.getVersion());
-		return message.toString();
 	}
 }
