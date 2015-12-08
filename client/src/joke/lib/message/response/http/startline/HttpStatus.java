@@ -1,7 +1,8 @@
 package joke.lib.message.response.http.startline;
 
 public enum HttpStatus {
-	OK("200", "OK");
+	OK("200", "OK"),
+	MOVED_TEMPORARILY("302", "Moved Temporarily");
 
 	private String statusCode;
 	private String statusMessage;

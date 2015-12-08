@@ -2,29 +2,26 @@ package joke.lib.message.general.http.header;
 
 import joke.lib.message.request.http.HttpRequestComponent;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class HttpHeaders implements HttpRequestComponent {
+public class HttpHeaders extends LinkedHashMap<String, HttpHeader> implements HttpRequestComponent {
 
 	public static final String SEPARATOR = ": ";
 
-	private List<HttpHeader> headers;
-
 	public HttpHeaders() {
-		this.headers = new ArrayList<>();
+		super();
 	}
 
-	public HttpHeaders(List<HttpHeader> headers) {
-		//FIXME 복사 문제?
-		this.headers = headers;
+	public HttpHeaders(Map<String, HttpHeader> headers) {
+		super(headers);
 	}
 
 	@Override public String buildComponent() {
 		StringBuilder message = new StringBuilder();
-		for(HttpHeader header : headers) {
-			message.append(header.getName())
-				.append(SEPARATOR).append(header.getValue())
+		for(Map.Entry<String, HttpHeader> header : this.entrySet()) {
+			message.append(header.getKey())
+				.append(": ").append(header.getValue().getValue())
 				.append(System.lineSeparator());
 		}
 		return message.toString();

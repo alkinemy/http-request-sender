@@ -8,9 +8,7 @@ import joke.lib.message.response.Response;
 import joke.lib.message.response.http.startline.HttpResponseStartLine;
 import joke.lib.message.response.http.startline.HttpStatus;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class HttpResponse implements Response {
 	private HttpResponseStartLine startLine;
@@ -35,11 +33,11 @@ public class HttpResponse implements Response {
 
 		private HttpVersion version;
 		private HttpStatus status;
-		private List<HttpHeader> headers;
+		private Map<String, HttpHeader> headers;
 		private String payload;
 
 		public Builder() {
-			this.headers = new ArrayList<>();
+			this.headers = new LinkedHashMap<>();
 		}
 
 		public HttpResponse build() {
@@ -66,7 +64,7 @@ public class HttpResponse implements Response {
 		}
 
 		public Builder addHeader(HttpHeader header) {
-			this.headers.add(header);
+			this.headers.put(header.getName(), header);
 			return this;
 		}
 
