@@ -21,7 +21,7 @@ public class HttpHeaders extends LinkedHashMap<String, HttpHeader> implements Ht
 		StringBuilder message = new StringBuilder();
 		for(Map.Entry<String, HttpHeader> header : this.entrySet()) {
 			message.append(header.getKey())
-				.append(": ").append(header.getValue().getValue())
+				.append(SEPARATOR).append(header.getValue().getValue())
 				.append(System.lineSeparator());
 		}
 		return message.toString();

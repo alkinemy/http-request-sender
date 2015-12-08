@@ -33,6 +33,7 @@ public class HttpResponseParser implements ResponseParser<HttpResponse> {
 		}
 
 		//payload
+		//TODO header의 content type을 보고 인코딩에 맞게 처리
 		builder.payload(response[1]);
 
 		return builder.build();

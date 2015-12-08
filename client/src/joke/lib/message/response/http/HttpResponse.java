@@ -25,6 +25,18 @@ public class HttpResponse implements Response {
 		this.payload = payload;
 	}
 
+	public HttpResponseStartLine getStartLine() {
+		return startLine;
+	}
+
+	public HttpHeaders getHeader() {
+		return header;
+	}
+
+	public HttpPayload getPayload() {
+		return payload;
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}
