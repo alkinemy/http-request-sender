@@ -1,11 +1,11 @@
 package joke.lib.message.request.http;
 
 import joke.lib.message.request.Request;
-import joke.lib.message.general.http.header.HttpHeader;
+import joke.lib.message.general.http.header.HttpHeaders;
 import joke.lib.message.general.http.payload.HttpPayload;
 import joke.lib.message.request.http.startline.HttpMethod;
 import joke.lib.message.request.http.startline.HttpRequestStartLine;
-import joke.lib.message.request.http.startline.HttpVersion;
+import joke.lib.message.general.http.startline.HttpVersion;
 
 import java.util.Objects;
 
@@ -13,10 +13,10 @@ public class HttpRequest implements Request {
 	public static final int DEFAULT_PORT = 80;
 
 	private HttpRequestStartLine startLine;
-	private HttpHeader header;
+	private HttpHeaders header;
 	private HttpPayload payload;
 
-	private HttpRequest(HttpRequestStartLine startLine, HttpHeader header, HttpPayload payload) {
+	private HttpRequest(HttpRequestStartLine startLine, HttpHeaders header, HttpPayload payload) {
 		Objects.requireNonNull(startLine, "Start line should not be null");
 		Objects.requireNonNull(header, "Header should not be null");
 		Objects.requireNonNull(payload, "Payload should not be null");
@@ -59,7 +59,7 @@ public class HttpRequest implements Request {
 			startLine.setMethod(method);
 			startLine.setTarget(target);
 			startLine.setVersion(version);
-			HttpHeader header = new HttpHeader();
+			HttpHeaders header = new HttpHeaders();
 			HttpPayload payload = new HttpPayload();
 			return new HttpRequest(startLine, header, payload);
 		}

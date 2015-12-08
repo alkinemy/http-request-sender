@@ -1,21 +1,30 @@
 package joke.lib.message.general.http.header;
 
-import joke.lib.message.request.http.HttpRequestComponent;
+public class HttpHeader {
 
-public class HttpHeader implements HttpRequestComponent {
-	private GeneralHeader general;
-	private RequestHeader request;
-	private ResponseHeader response;
-	private EntityHeader entity;
-	private ExtensionHeader extension;
+	private String name;
+	private String value;
 
-	@Override public String buildComponent() {
-		StringBuilder header = new StringBuilder();
-		header.append(general.buildHeader()).append(System.lineSeparator())
-			.append(request.buildHeader()).append(System.lineSeparator())
-			.append(response.buildHeader()).append(System.lineSeparator())
-			.append(entity.buildHeader()).append(System.lineSeparator())
-			.append(extension.buildHeader()).append(System.lineSeparator());
-		return header.toString();
+	public static HttpHeader of(String name, String value) {
+		HttpHeader header = new HttpHeader();
+		header.setName(name);
+		header.setValue(value);
+		return header;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public void setValue(String value) {
+		this.value = value;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

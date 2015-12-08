@@ -1,5 +1,6 @@
 package joke.lib.message.request.http.startline;
 
+import joke.lib.message.general.http.startline.HttpVersion;
 import joke.lib.message.request.http.HttpRequestComponent;
 
 public class HttpRequestStartLine implements HttpRequestComponent {
