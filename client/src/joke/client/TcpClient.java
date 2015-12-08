@@ -9,7 +9,7 @@ import java.nio.charset.Charset;
 
 public class TcpClient {
 
-	public Response connectAndSend(Request request) {
+	public Response send(Request request) {
 		try (Socket socket = new Socket(request.getAddress(), request.getPort());
 			OutputStream socketOutputStream = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()));
 			InputStream socketInputStream = new BufferedInputStream(socket.getInputStream());

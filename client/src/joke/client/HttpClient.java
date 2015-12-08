@@ -11,6 +11,6 @@ public class HttpClient {
 	}
 
 	public HttpResponse sendRequest(HttpRequest request) {
-		return (HttpResponse) client.connectAndSend(request);
+		return (HttpResponse) client.send(request);
 	}
 }
