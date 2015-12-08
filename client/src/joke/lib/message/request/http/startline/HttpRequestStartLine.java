@@ -2,7 +2,7 @@ package joke.lib.message.request.http.startline;
 
 import joke.lib.message.request.http.HttpRequestComponent;
 
-public class HttpStartLine implements HttpRequestComponent {
+public class HttpRequestStartLine implements HttpRequestComponent {
 	private HttpMethod method;
 	private String target;
 	private HttpVersion version;

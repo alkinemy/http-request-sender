@@ -1,4 +1,4 @@
-package joke.lib.message.request.http.header;
+package joke.lib.message.general.http.header;
 
 public class GeneralHeader implements HttpHeaderComponent {
 	@Override public String buildHeader() {

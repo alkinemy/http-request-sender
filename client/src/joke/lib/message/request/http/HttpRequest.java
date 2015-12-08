@@ -1,10 +1,10 @@
 package joke.lib.message.request.http;
 
 import joke.lib.message.request.Request;
-import joke.lib.message.request.http.header.HttpHeader;
+import joke.lib.message.general.http.header.HttpHeader;
 import joke.lib.message.general.http.payload.HttpPayload;
 import joke.lib.message.request.http.startline.HttpMethod;
-import joke.lib.message.request.http.startline.HttpStartLine;
+import joke.lib.message.request.http.startline.HttpRequestStartLine;
 import joke.lib.message.request.http.startline.HttpVersion;
 
 import java.util.Objects;
@@ -12,11 +12,11 @@ import java.util.Objects;
 public class HttpRequest implements Request {
 	public static final int DEFAULT_PORT = 80;
 
-	private HttpStartLine startLine;
+	private HttpRequestStartLine startLine;
 	private HttpHeader header;
 	private HttpPayload payload;
 
-	private HttpRequest(HttpStartLine startLine, HttpHeader header, HttpPayload payload) {
+	private HttpRequest(HttpRequestStartLine startLine, HttpHeader header, HttpPayload payload) {
 		Objects.requireNonNull(startLine, "Start line should not be null");
 		Objects.requireNonNull(header, "Header should not be null");
 		Objects.requireNonNull(payload, "Payload should not be null");
@@ -55,7 +55,7 @@ public class HttpRequest implements Request {
 		private HttpVersion version;
 
 		public HttpRequest build() {
-			HttpStartLine startLine = new HttpStartLine();
+			HttpRequestStartLine startLine = new HttpRequestStartLine();
 			startLine.setMethod(method);
 			startLine.setTarget(target);
 			startLine.setVersion(version);

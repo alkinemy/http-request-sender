@@ -1,4 +1,4 @@
-package joke.lib.message.request.http.header;
+package joke.lib.message.general.http.header;
 
 import joke.lib.message.request.http.HttpRequestComponent;
 
