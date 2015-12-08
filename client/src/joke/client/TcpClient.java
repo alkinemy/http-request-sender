@@ -2,6 +2,8 @@ package joke.client;
 
 import joke.message.request.Request;
 import joke.message.response.Response;
+import joke.message.response.parser.ResponseParser;
+import joke.message.response.parser.DefaultResponseParser;
 
 import java.io.*;
 import java.net.Socket;
@@ -9,23 +11,33 @@ import java.nio.charset.Charset;
 
 public class TcpClient {
 
+	public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+
+	private ResponseParser parser;
+
+	public TcpClient() {
+		this.parser = new DefaultResponseParser();
+	}
+
+	public TcpClient(ResponseParser parser) {
+		this.parser = parser;
+	}
+
 	public Response send(Request request) {
 		try (Socket socket = new Socket(request.getAddress(), request.getPort());
 			OutputStream socketOutputStream = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()));
 			InputStream socketInputStream = new BufferedInputStream(socket.getInputStream());
-			ByteArrayOutputStream bos = new ByteArrayOutputStream()) {
+			ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream()) {
 
-			socketOutputStream.write(request.getMessage().getBytes(Charset.forName("UTF-8")));
+			socketOutputStream.write(request.getMessage().getBytes(DEFAULT_CHARSET));
 			socketOutputStream.flush();
 
 			int data;
 			while((data = socketInputStream.read()) != -1) {
-				bos.write(data);
+				responseOutputStream.write(data);
 			}
-			byte[] bytes = bos.toByteArray();
-			System.out.println(new String(bytes, Charset.forName("UTF-8")));
 
-			return null;
+			return parser.parse(new String(responseOutputStream.toByteArray(), DEFAULT_CHARSET));
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -33,4 +45,7 @@ public class TcpClient {
 		}
 	}
 
+	public void setResponseParser(ResponseParser parser) {
+		this.parser = parser;
+	}
 }
