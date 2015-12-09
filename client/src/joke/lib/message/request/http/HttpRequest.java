@@ -75,7 +75,7 @@ public class HttpRequest implements Request {
 				.append(headers.buildComponent());
 		}
 		if (payload != null && payload.getContent() != null && !payload.getContent().isEmpty()) {
-			request.append(System.lineSeparator()).append(System.lineSeparator())
+			request.append(System.lineSeparator())
 				.append(payload.buildComponent());
 		}
 		request.append(System.lineSeparator()).append(System.lineSeparator());

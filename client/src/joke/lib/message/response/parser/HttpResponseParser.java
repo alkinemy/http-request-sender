@@ -10,7 +10,7 @@ import java.io.StringReader;
 
 public class HttpResponseParser implements ResponseParser<HttpResponse> {
 	@Override public HttpResponse parse(String responseString) {
-		System.out.println("Original response:\n---------------------------------------------"
+		System.out.println("Original response:\n---------------------------------------------\n"
 			+ responseString + "\n---------------------------------------------\n");
 
 		String[] response = responseString.split("\r\n\r\n", 2);

@@ -35,6 +35,10 @@ public class HttpResponse implements Response {
 		return payload;
 	}
 
+	public HttpStatus getStatus() {
+		return startLine.getStatus();
+	}
+
 	public static Builder builder() {
 		return new Builder();
 	}

@@ -29,7 +29,11 @@ public class TcpClient {
 			InputStream socketInputStream = new BufferedInputStream(socket.getInputStream());
 			ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream()) {
 
-			socketOutputStream.write(request.getMessage().getBytes(DEFAULT_CHARSET));
+			String message = request.getMessage();
+			System.out.println("Original request:\n---------------------------------------------\n"
+				+ message + "\n---------------------------------------------\n");
+
+			socketOutputStream.write(message.getBytes(DEFAULT_CHARSET));
 			socketOutputStream.flush();
 
 			int data;
