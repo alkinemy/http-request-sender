@@ -24,7 +24,7 @@ public class TcpClient {
 	}
 
 	public Response send(Request request) {
-		try (Socket socket = new Socket(request.getAddress(), request.getPort());
+		try (Socket socket = new Socket(request.getBaseUrl(), request.getPort());
 			OutputStream socketOutputStream = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()));
 			InputStream socketInputStream = new BufferedInputStream(socket.getInputStream());
 			ByteArrayOutputStream responseOutputStream = new ByteArrayOutputStream()) {

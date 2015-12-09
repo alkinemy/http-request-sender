@@ -12,16 +12,14 @@ import java.util.*;
 
 public class HttpResponse implements Response {
 	private HttpResponseStartLine startLine;
-	private HttpHeaders header;
+	private HttpHeaders headers;
 	private HttpPayload payload;
 
-	private HttpResponse(HttpResponseStartLine startLine, HttpHeaders header, HttpPayload payload) {
-		Objects.requireNonNull(startLine);
-		Objects.requireNonNull(header);
-		Objects.requireNonNull(payload);
+	private HttpResponse(HttpResponseStartLine startLine, HttpHeaders headers, HttpPayload payload) {
+		Objects.requireNonNull(startLine, "Start line should not be null");
 
 		this.startLine = startLine;
-		this.header = header;
+		this.headers = headers;
 		this.payload = payload;
 	}
 
@@ -29,8 +27,8 @@ public class HttpResponse implements Response {
 		return startLine;
 	}
 
-	public HttpHeaders getHeader() {
-		return header;
+	public HttpHeaders getHeaders() {
+		return headers;
 	}
 
 	public HttpPayload getPayload() {
@@ -57,12 +55,11 @@ public class HttpResponse implements Response {
 			startLine.setStatus(status);
 			startLine.setVersion(version);
 
-			HttpHeaders header = new HttpHeaders(headers);
+			HttpHeaders headers = new HttpHeaders(this.headers);
 
-			HttpPayload payload = new HttpPayload();
-			payload.setContent(this.payload);
+			HttpPayload payload = new HttpPayload(this.payload);
 
-			return new HttpResponse(startLine, header, payload);
+			return new HttpResponse(startLine, headers, payload);
 		}
 
 		public Builder version(String version) {

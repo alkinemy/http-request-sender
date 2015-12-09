@@ -1,11 +1,12 @@
 package joke.lib.message.general.http.header;
 
 import joke.lib.message.request.http.HttpRequestComponent;
+import joke.lib.message.response.http.HttpResponseComponent;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class HttpHeaders extends LinkedHashMap<String, HttpHeader> implements HttpRequestComponent {
+public class HttpHeaders extends LinkedHashMap<String, HttpHeader> implements HttpRequestComponent, HttpResponseComponent {
 
 	public static final String SEPARATOR = ": ";
 
@@ -26,22 +27,5 @@ public class HttpHeaders extends LinkedHashMap<String, HttpHeader> implements Ht
 		}
 		return message.toString();
 	}
-
-	//	private GeneralHeader general;
-//	private RequestHeader request;
-//	private ResponseHeader response;
-//	private EntityHeader entity;
-//	private ExtensionHeader extension;
-//
-//	@Override public String buildComponent() {
-//		StringBuilder header = new StringBuilder();
-//		header.append(general.buildHeader()).append(System.lineSeparator())
-//			.append(request.buildHeader()).append(System.lineSeparator())
-//			.append(response.buildHeader()).append(System.lineSeparator())
-//			.append(entity.buildHeader()).append(System.lineSeparator())
-//			.append(extension.buildHeader()).append(System.lineSeparator());
-//		return header.toString();
-//	}
-
 
 }

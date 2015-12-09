@@ -1,47 +1,85 @@
 package joke.lib.message.request.http;
 
-import joke.lib.message.request.Request;
+import joke.lib.message.general.http.header.HttpHeader;
 import joke.lib.message.general.http.header.HttpHeaders;
 import joke.lib.message.general.http.payload.HttpPayload;
+import joke.lib.message.general.http.startline.HttpVersion;
+import joke.lib.message.request.Request;
 import joke.lib.message.request.http.startline.HttpMethod;
 import joke.lib.message.request.http.startline.HttpRequestStartLine;
-import joke.lib.message.general.http.startline.HttpVersion;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 
 public class HttpRequest implements Request {
 	public static final int DEFAULT_PORT = 80;
 
 	private HttpRequestStartLine startLine;
-	private HttpHeaders header;
+	private HttpHeaders headers;
 	private HttpPayload payload;
 
-	private HttpRequest(HttpRequestStartLine startLine, HttpHeaders header, HttpPayload payload) {
+	private String baseUrl;
+	private int port = DEFAULT_PORT;
+
+	private HttpRequest(HttpRequestStartLine startLine, String baseUrl, Integer port) {
+		Objects.requireNonNull(baseUrl, "Base url should not be null");
 		Objects.requireNonNull(startLine, "Start line should not be null");
-		Objects.requireNonNull(header, "Header should not be null");
-		Objects.requireNonNull(payload, "Payload should not be null");
 
 		this.startLine = startLine;
-		this.header = header;
+		this.baseUrl = baseUrl;
+		this.port = port != null ? port : DEFAULT_PORT;
+	}
+
+	private HttpRequest(HttpRequestStartLine startLine, String baseUrl, Integer port, HttpHeaders headers) {
+		this(startLine, baseUrl, port);
+
+		this.headers = headers;
+	}
+
+	private HttpRequest(HttpRequestStartLine startLine, String baseUrl, Integer port, HttpHeaders headers, HttpPayload payload) {
+		this(startLine, baseUrl, port, headers);
+
 		this.payload = payload;
+	}
+
+	public HttpPayload getPayload() {
+		return payload;
+	}
+
+	public HttpHeaders getHeaders() {
+		return headers;
+	}
+
+	public HttpRequestStartLine getStartLine() {
+		return startLine;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
+	}
+
+	@Override public int getPort() {
+		return port;
+	}
+
+	@Override public String getBaseUrl() {
+		return baseUrl;
 	}
 
 	@Override public String getMessage() {
 		StringBuilder request = new StringBuilder();
-		request.append(startLine.buildComponent())
-			.append(System.lineSeparator())
-			.append(header.buildComponent())
-			.append(System.lineSeparator())
-			.append(payload.buildComponent());
+		request.append(startLine.buildComponent());
+		if (headers != null && !headers.isEmpty()) {
+			request.append(System.lineSeparator())
+				.append(headers.buildComponent());
+		}
+		if (payload != null && payload.getContent() != null && !payload.getContent().isEmpty()) {
+			request.append(System.lineSeparator()).append(System.lineSeparator())
+				.append(payload.buildComponent());
+		}
+		request.append(System.lineSeparator()).append(System.lineSeparator());
 		return request.toString();
-	}
-
-	public String getAddress() {
-		return startLine.getTarget();
-	}
-
-	@Override public int getPort() {
-		return DEFAULT_PORT;
 	}
 
 	public static Builder builder() {
@@ -52,16 +90,38 @@ public class HttpRequest implements Request {
 	public static class Builder {
 		private HttpMethod method;
 		private String target;
+		private String baseUrl;
+		private Integer port;
 		private HttpVersion version;
+		private Map<String, HttpHeader> headers;
+		private String payload;
+
+		public Builder() {
+			this.headers = new LinkedHashMap<>();
+		}
 
 		public HttpRequest build() {
 			HttpRequestStartLine startLine = new HttpRequestStartLine();
-			startLine.setMethod(method);
-			startLine.setTarget(target);
-			startLine.setVersion(version);
-			HttpHeaders header = new HttpHeaders();
-			HttpPayload payload = new HttpPayload();
-			return new HttpRequest(startLine, header, payload);
+			startLine.setMethod(this.method);
+			startLine.setTarget(this.target);
+			startLine.setVersion(this.version);
+
+			HttpHeaders headers = null;
+			if (!this.headers.isEmpty()) {
+				headers = new HttpHeaders(this.headers);
+			}
+			HttpPayload payload = null;
+			if (this.payload != null) {
+				payload = new HttpPayload(this.payload);
+			}
+
+			if (headers == null) {
+				return new HttpRequest(startLine, baseUrl, port);
+			} else if (payload == null) {
+				return new HttpRequest(startLine, baseUrl, port, headers);
+			} else {
+				return new HttpRequest(startLine, baseUrl, port, headers, payload);
+			}
 		}
 
 		public Builder method(HttpMethod method) {
@@ -74,8 +134,28 @@ public class HttpRequest implements Request {
 			return this;
 		}
 
+		public Builder baseUrl(String baseUrl) {
+			this.baseUrl = baseUrl;
+			return this;
+		}
+
+		public Builder port(Integer port) {
+			this.port = port;
+			return this;
+		}
+
 		public Builder version(HttpVersion version) {
 			this.version = version;
+			return this;
+		}
+
+		public Builder addHeader(HttpHeader header) {
+			this.headers.put(header.getName(), header);
+			return this;
+		}
+
+		public Builder payload(String payload) {
+			this.payload = payload;
 			return this;
 		}
 	}

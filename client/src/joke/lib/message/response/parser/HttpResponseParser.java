@@ -10,6 +10,9 @@ import java.io.StringReader;
 
 public class HttpResponseParser implements ResponseParser<HttpResponse> {
 	@Override public HttpResponse parse(String responseString) {
+		System.out.println("Original response:\n---------------------------------------------"
+			+ responseString + "\n---------------------------------------------\n");
+
 		String[] response = responseString.split("\r\n\r\n", 2);
 		HttpResponse.Builder builder = HttpResponse.builder();
 
@@ -23,7 +26,6 @@ public class HttpResponseParser implements ResponseParser<HttpResponse> {
 			//header
 			String header;
 			while((header = reader.readLine()) != null) {
-				System.out.println(header);
 				String[] headerComponents = header.split(HttpHeaders.SEPARATOR);
 				builder.addHeader(HttpHeader.of(headerComponents[0], headerComponents[1]));
 			}

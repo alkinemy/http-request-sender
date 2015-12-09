@@ -1,7 +1,7 @@
 package joke.lib.message.request;
 
 public interface Request {
-	String getAddress();
+	String getBaseUrl();
 	int getPort();
 	String getMessage();
 }
