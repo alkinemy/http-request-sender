@@ -7,9 +7,11 @@ import joke.lib.message.common.http.startline.HttpVersion;
 import joke.lib.message.response.Response;
 import joke.lib.message.response.http.startline.HttpResponseStartLine;
 import joke.lib.message.response.http.startline.HttpStatus;
+import lombok.Getter;
 
 import java.util.*;
 
+@Getter
 public class HttpResponse implements Response {
 	private HttpResponseStartLine startLine;
 	private HttpHeaders headers;
@@ -23,20 +25,12 @@ public class HttpResponse implements Response {
 		this.payload = payload;
 	}
 
-	public HttpResponseStartLine getStartLine() {
-		return startLine;
-	}
-
-	public HttpHeaders getHeaders() {
-		return headers;
-	}
-
-	public HttpPayload getPayload() {
-		return payload;
-	}
-
 	public HttpStatus getStatus() {
 		return startLine.getStatus();
+	}
+
+	@Override public String getMessage() {
+		return null;
 	}
 
 	public static Builder builder() {
@@ -66,8 +60,18 @@ public class HttpResponse implements Response {
 			return new HttpResponse(startLine, headers, payload);
 		}
 
+		public Builder version(HttpVersion version) {
+			this.version = version;
+			return this;
+		}
+
 		public Builder version(String version) {
 			this.version = HttpVersion.convertToVersion(version);
+			return this;
+		}
+
+		public Builder statusCode(HttpStatus status) {
+			this.status = status;
 			return this;
 		}
 

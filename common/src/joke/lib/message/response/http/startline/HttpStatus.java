@@ -2,7 +2,9 @@ package joke.lib.message.response.http.startline;
 
 public enum HttpStatus {
 	OK("200", "OK"),
-	REDIRECT("302", "Moved Temporarily");
+	REDIRECT("302", "302 Found"),
+	NOT_FOUND("404", "Not Found"),
+	INTERNAL("500", "Internal Server Error");
 
 	private String statusCode;
 	private String statusMessage;

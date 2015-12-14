@@ -10,4 +10,8 @@ public class DefaultResponse implements Response {
 	public String getResponseString() {
 		return responseString;
 	}
+
+	@Override public String getMessage() {
+		return responseString;
+	}
 }
