@@ -30,7 +30,18 @@ public class HttpResponse implements Response {
 	}
 
 	@Override public String getMessage() {
-		return null;
+		StringBuilder response = new StringBuilder();
+		response.append(startLine.buildComponent());
+		if (headers != null && !headers.isEmpty()) {
+			response.append(System.lineSeparator())
+				.append(headers.buildComponent());
+		}
+		if (payload != null && payload.getContent() != null && !payload.getContent().isEmpty()) {
+			response.append(System.lineSeparator())
+				.append(payload.buildComponent());
+		}
+		response.append(System.lineSeparator()).append(System.lineSeparator());
+		return response.toString();
 	}
 
 	public static Builder builder() {
@@ -53,9 +64,15 @@ public class HttpResponse implements Response {
 			startLine.setStatus(status);
 			startLine.setVersion(version);
 
-			HttpHeaders headers = new HttpHeaders(this.headers);
+			HttpHeaders headers = null;
+			if (!this.headers.isEmpty()) {
+				headers = new HttpHeaders(this.headers);
+			}
 
-			HttpPayload payload = new HttpPayload(this.payload);
+			HttpPayload payload = null;
+			if (this.payload != null) {
+				payload = new HttpPayload(this.payload);
+			}
 
 			return new HttpResponse(startLine, headers, payload);
 		}

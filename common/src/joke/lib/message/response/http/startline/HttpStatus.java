@@ -1,5 +1,8 @@
 package joke.lib.message.response.http.startline;
 
+import lombok.Getter;
+
+@Getter
 public enum HttpStatus {
 	OK("200", "OK"),
 	REDIRECT("302", "302 Found"),
@@ -12,14 +15,6 @@ public enum HttpStatus {
 	HttpStatus(String statusCode, String statusMessage) {
 		this.statusCode = statusCode;
 		this.statusMessage = statusMessage;
-	}
-
-	public String getStatusCode() {
-		return statusCode;
-	}
-
-	public String getStatusMessage() {
-		return statusMessage;
 	}
 
 	public static HttpStatus convertToStatus(String statusCode) {

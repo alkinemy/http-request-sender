@@ -2,12 +2,14 @@ package joke.lib.server.tcp;
 
 import joke.lib.message.request.Request;
 import joke.lib.message.request.parser.RequestParser;
+import joke.lib.message.response.DefaultResponse;
 import joke.lib.message.response.Response;
 
 import java.io.*;
 import java.net.Socket;
 
 public class TcpServerWorker<Q extends Request, P extends Response> {
+
 	private final RequestParser<Q> parser;
 
 	public TcpServerWorker(RequestParser<Q> parser) {
@@ -45,7 +47,7 @@ public class TcpServerWorker<Q extends Request, P extends Response> {
 
 	//TODO override
 	protected P handleRequest(Q request) {
-		return null;
+		return (P) new DefaultResponse("???");
 	}
 
 	private void closeQuietly(Closeable closeable) {

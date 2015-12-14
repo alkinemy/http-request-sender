@@ -19,8 +19,7 @@ public class BlockingHttpServer extends BlockingTcpServer<HttpRequest, HttpRespo
 		super(port, new HttpRequestParser());
 	}
 
-	@Override
-	protected Thread createWorkerThread(Socket socket) {
+	@Override protected Thread createWorkerThread(Socket socket) {
 		return new Thread(() -> new HttpServerWorker(parser).work(socket));
 	}
 }

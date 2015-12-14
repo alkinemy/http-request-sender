@@ -7,11 +7,13 @@ import joke.lib.message.common.http.startline.HttpVersion;
 import joke.lib.message.request.Request;
 import joke.lib.message.request.http.startline.HttpMethod;
 import joke.lib.message.request.http.startline.HttpRequestStartLine;
+import lombok.Getter;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Objects;
 
+@Getter
 public class HttpRequest implements Request {
 	public static final int DEFAULT_PORT = 80;
 
@@ -22,49 +24,15 @@ public class HttpRequest implements Request {
 	private String baseUrl;
 	private int port = DEFAULT_PORT;
 
-	private HttpRequest(HttpRequestStartLine startLine, String baseUrl, Integer port) {
-		Objects.requireNonNull(baseUrl, "Base url should not be null");
+	private HttpRequest(HttpRequestStartLine startLine, String baseUrl, Integer port, HttpHeaders headers, HttpPayload payload) {
 		Objects.requireNonNull(startLine, "Start line should not be null");
+		Objects.requireNonNull(baseUrl, "Base url should not be null");
 
 		this.startLine = startLine;
 		this.baseUrl = baseUrl;
 		this.port = port != null ? port : DEFAULT_PORT;
-	}
-
-	private HttpRequest(HttpRequestStartLine startLine, String baseUrl, Integer port, HttpHeaders headers) {
-		this(startLine, baseUrl, port);
-
 		this.headers = headers;
-	}
-
-	private HttpRequest(HttpRequestStartLine startLine, String baseUrl, Integer port, HttpHeaders headers, HttpPayload payload) {
-		this(startLine, baseUrl, port, headers);
-
 		this.payload = payload;
-	}
-
-	public HttpPayload getPayload() {
-		return payload;
-	}
-
-	public HttpHeaders getHeaders() {
-		return headers;
-	}
-
-	public HttpRequestStartLine getStartLine() {
-		return startLine;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
-
-	@Override public int getPort() {
-		return port;
-	}
-
-	@Override public String getBaseUrl() {
-		return baseUrl;
 	}
 
 	@Override public String getMessage() {
@@ -86,7 +54,6 @@ public class HttpRequest implements Request {
 		return new Builder();
 	}
 
-	//TODO builder 구현
 	public static class Builder {
 		private HttpMethod method;
 		private String target;
@@ -115,13 +82,7 @@ public class HttpRequest implements Request {
 				payload = new HttpPayload(this.payload);
 			}
 
-			if (headers == null) {
-				return new HttpRequest(startLine, baseUrl, port);
-			} else if (payload == null) {
-				return new HttpRequest(startLine, baseUrl, port, headers);
-			} else {
-				return new HttpRequest(startLine, baseUrl, port, headers, payload);
-			}
+			return new HttpRequest(startLine, baseUrl, port, headers, payload);
 		}
 
 		public Builder method(HttpMethod method) {
