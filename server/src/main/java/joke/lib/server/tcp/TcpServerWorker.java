@@ -21,8 +21,6 @@ public class TcpServerWorker<Q extends Request, P extends Response> {
 			InputStream socketInputStream = new BufferedInputStream(socket.getInputStream());
 			ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream()) {
 
-			System.out.println("Request accepted");
-
 			int data;
 			while ((data = socketInputStream.read()) != -1) {
 				requestOutputStream.write(data);
@@ -41,7 +39,6 @@ public class TcpServerWorker<Q extends Request, P extends Response> {
 			e.printStackTrace();
 		} finally {
 			closeQuietly(socket);
-			System.out.println("Request ended");
 		}
 	}
 

@@ -1,5 +1,14 @@
 package joke.lib.message.request.http.startline;
 
 public enum HttpMethod {
-	GET, POST
+	GET, POST;
+
+	public static HttpMethod convertToMethod(String methodString) {
+		for(HttpMethod method : HttpMethod.values()) {
+			if (method.name().equals(methodString)) {
+				return method;
+			}
+		}
+		return null;
+	}
 }

@@ -90,6 +90,11 @@ public class HttpRequest implements Request {
 			return this;
 		}
 
+		public Builder method(String method) {
+			this.method = HttpMethod.convertToMethod(method);
+			return this;
+		}
+
 		public Builder target(String target) {
 			this.target = target;
 			return this;
@@ -107,6 +112,11 @@ public class HttpRequest implements Request {
 
 		public Builder version(HttpVersion version) {
 			this.version = version;
+			return this;
+		}
+
+		public Builder version(String version) {
+			this.version = HttpVersion.convertToVersion(version);
 			return this;
 		}
 

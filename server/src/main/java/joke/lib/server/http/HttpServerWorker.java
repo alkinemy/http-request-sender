@@ -38,7 +38,7 @@ public class HttpServerWorker extends TcpServerWorker<HttpRequest, HttpResponse>
 				.statusCode(HttpStatus.NOT_FOUND)
 				.version(request.getStartLine().getVersion())
 				.build();
-		} catch (IOException exception) {
+		} catch (Exception exception) {
 			return HttpResponse.builder()
 				.statusCode(HttpStatus.INTERNAL)
 				.version(request.getStartLine().getVersion())
