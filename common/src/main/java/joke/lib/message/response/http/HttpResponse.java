@@ -38,6 +38,7 @@ public class HttpResponse implements Response {
 		}
 		if (payload != null && payload.getContent() != null && !payload.getContent().isEmpty()) {
 			response.append(System.lineSeparator())
+				.append(System.lineSeparator())
 				.append(payload.buildComponent());
 		}
 		response.append(System.lineSeparator()).append(System.lineSeparator());

@@ -18,18 +18,17 @@ public class TcpServerWorker<Q extends Request, P extends Response> {
 
 	public void work(Socket socket) {
 		try (OutputStream socketOutputStream = new BufferedOutputStream(new DataOutputStream(socket.getOutputStream()));
-			InputStream socketInputStream = new BufferedInputStream(socket.getInputStream());
-			ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream()) {
+			InputStream socketInputStream = new BufferedInputStream(socket.getInputStream())) {
 
-			int data;
-			while ((data = socketInputStream.read()) != -1) {
-				requestOutputStream.write(data);
-			}
-			System.out.println(new String(requestOutputStream.toByteArray(), BlockingTcpServer.DEFAULT_CHARSET));
-
-			Q request = parser.parse(new String(requestOutputStream.toByteArray(), BlockingTcpServer.DEFAULT_CHARSET));
+			String input = read(socketInputStream);
+			System.out.println("----request");
+			System.out.println(input);
+			Q request = parser.parse(input);
 
 			P response = handleRequest(request);
+
+			System.out.println("----response");
+			System.out.println(response.getMessage());
 
 			socketOutputStream.write(response.getMessage().getBytes(BlockingTcpServer.DEFAULT_CHARSET));
 			socketOutputStream.flush();
@@ -39,6 +38,17 @@ public class TcpServerWorker<Q extends Request, P extends Response> {
 			e.printStackTrace();
 		} finally {
 			closeQuietly(socket);
+		}
+	}
+
+	protected String read(InputStream socketInputStream) throws IOException {
+		try (ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream()) {
+			int data;
+			while ((data = socketInputStream.read()) != -1) {
+				requestOutputStream.write(data);
+			}
+
+			return new String(requestOutputStream.toByteArray(), BlockingTcpServer.DEFAULT_CHARSET);
 		}
 	}
 

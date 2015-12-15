@@ -10,7 +10,7 @@ import java.io.StringReader;
 
 public class HttpRequestParser implements RequestParser<HttpRequest> {
 	@Override public HttpRequest parse(String requestString) {
-		String[] request = requestString.split("\r\n\r\n", 2);
+		String[] request = requestString.split("\r\n\r", 2);
 		HttpRequest.Builder builder = HttpRequest.builder();
 
 		try (BufferedReader reader = new BufferedReader(new StringReader(request[0]))) {
@@ -25,6 +25,8 @@ public class HttpRequestParser implements RequestParser<HttpRequest> {
 			String header;
 			while((header = reader.readLine()) != null) {
 				String[] headerComponents = header.split(HttpHeaders.SEPARATOR);
+				System.out.println(headerComponents[0]);
+				System.out.println(headerComponents[1]);
 				builder.addHeader(HttpHeader.of(headerComponents[0], headerComponents[1]));
 
 				if ("Host".equals(headerComponents[0])) {
