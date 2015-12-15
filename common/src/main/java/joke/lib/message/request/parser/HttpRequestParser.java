@@ -23,10 +23,8 @@ public class HttpRequestParser implements RequestParser<HttpRequest> {
 
 			//header
 			String header;
-			while((header = reader.readLine()) != null) {
+			while ((header = reader.readLine()) != null) {
 				String[] headerComponents = header.split(HttpHeaders.SEPARATOR);
-				System.out.println(headerComponents[0]);
-				System.out.println(headerComponents[1]);
 				builder.addHeader(HttpHeader.of(headerComponents[0], headerComponents[1]));
 
 				if ("Host".equals(headerComponents[0])) {
@@ -38,6 +36,10 @@ public class HttpRequestParser implements RequestParser<HttpRequest> {
 			builder.payload(request[1]);
 
 			return builder.build();
+		} catch (NullPointerException e) {
+			System.out.println(requestString);
+			e.printStackTrace();
+			return null;
 		} catch (IOException e) {
 			e.printStackTrace();
 			return null;

@@ -21,14 +21,18 @@ public class TcpServerWorker<Q extends Request, P extends Response> {
 			InputStream socketInputStream = new BufferedInputStream(socket.getInputStream())) {
 
 			String input = read(socketInputStream);
-			System.out.println("----request");
-			System.out.println(input);
+			if (input.isEmpty()) {
+				socket.close();
+				return;
+			}
+//			System.out.println("----request");
+//			System.out.println(input);
 			Q request = parser.parse(input);
 
 			P response = handleRequest(request);
 
-			System.out.println("----response");
-			System.out.println(response.getMessage());
+//			System.out.println("----response");
+//			System.out.println(response.getMessage());
 
 			socketOutputStream.write(response.getMessage().getBytes(BlockingTcpServer.DEFAULT_CHARSET));
 			socketOutputStream.flush();

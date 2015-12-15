@@ -9,8 +9,12 @@ import joke.lib.server.tcp.TcpServerWorker;
 
 import java.io.*;
 import java.net.URL;
+import java.util.Arrays;
 
 public class HttpServerWorker extends TcpServerWorker<HttpRequest, HttpResponse> {
+
+	private static final int[] END_PATTERN = new int[] {13, 10, 13, 10};
+
 	public HttpServerWorker(RequestParser<HttpRequest> parser) {
 		super(parser);
 	}
@@ -57,11 +61,26 @@ public class HttpServerWorker extends TcpServerWorker<HttpRequest, HttpResponse>
 	@Override protected String read(InputStream socketInputStream) throws IOException {
 		try (ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream()) {
 			int current;
-			while ((current = socketInputStream.read()) != -1 && socketInputStream.available() != 0) {
+			int[] pattern = new int[4];
+			while ((current = socketInputStream.read()) != -1) {
 				requestOutputStream.write(current);
+
+				pattern = shiftLeftAndAppend(pattern, current);
+				if (Arrays.equals(END_PATTERN, pattern)) {
+					break;
+				}
 			}
 
 			return new String(requestOutputStream.toByteArray(), BlockingTcpServer.DEFAULT_CHARSET);
 		}
+	}
+
+	private int[] shiftLeftAndAppend(int[] pattern, int data) {
+		int[] newPattern = new int[4];
+		newPattern[0] = pattern[1];
+		newPattern[1] = pattern[2];
+		newPattern[2] = pattern[3];
+		newPattern[3] = data;
+		return newPattern;
 	}
 }
