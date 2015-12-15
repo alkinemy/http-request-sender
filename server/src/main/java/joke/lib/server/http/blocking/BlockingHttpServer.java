@@ -1,9 +1,9 @@
-package joke.lib.server.http;
+package joke.lib.server.http.blocking;
 
 import joke.lib.message.request.http.HttpRequest;
 import joke.lib.message.request.parser.HttpRequestParser;
 import joke.lib.message.response.http.HttpResponse;
-import joke.lib.server.tcp.BlockingTcpServer;
+import joke.lib.server.tcp.blocking.BlockingTcpServer;
 
 import java.net.Socket;
 
@@ -12,7 +12,7 @@ public class BlockingHttpServer extends BlockingTcpServer<HttpRequest, HttpRespo
 	public static final int DEFAULT_PORT = 80;
 
 	public BlockingHttpServer() {
-		super(DEFAULT_PORT, new HttpRequestParser());
+		this(DEFAULT_PORT);
 	}
 
 	public BlockingHttpServer(int port) {
@@ -20,6 +20,6 @@ public class BlockingHttpServer extends BlockingTcpServer<HttpRequest, HttpRespo
 	}
 
 	@Override protected Thread createWorkerThread(Socket socket) {
-		return new Thread(() -> new HttpServerWorker(parser).work(socket));
+		return new Thread(() -> new BlockingHttpServerWorker(parser).work(socket));
 	}
 }

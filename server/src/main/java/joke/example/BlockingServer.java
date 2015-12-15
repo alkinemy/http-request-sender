@@ -1,6 +1,6 @@
 package joke.example;
 
-import joke.lib.server.http.BlockingHttpServer;
+import joke.lib.server.http.blocking.BlockingHttpServer;
 
 public class BlockingServer {
 

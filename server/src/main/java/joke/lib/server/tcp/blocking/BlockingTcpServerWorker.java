@@ -1,18 +1,20 @@
-package joke.lib.server.tcp;
+package joke.lib.server.tcp.blocking;
 
 import joke.lib.message.request.Request;
 import joke.lib.message.request.parser.RequestParser;
 import joke.lib.message.response.DefaultResponse;
 import joke.lib.message.response.Response;
+import joke.lib.server.ServerWorker;
+import joke.lib.util.CloseableUtils;
 
 import java.io.*;
 import java.net.Socket;
 
-public class TcpServerWorker<Q extends Request, P extends Response> {
+public class BlockingTcpServerWorker<Q extends Request, P extends Response> implements ServerWorker<Q, P> {
 
 	private final RequestParser<Q> parser;
 
-	public TcpServerWorker(RequestParser<Q> parser) {
+	public BlockingTcpServerWorker(RequestParser<Q> parser) {
 		this.parser = parser;
 	}
 
@@ -41,7 +43,7 @@ public class TcpServerWorker<Q extends Request, P extends Response> {
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			closeQuietly(socket);
+			CloseableUtils.closeQuietly(socket);
 		}
 	}
 
@@ -57,17 +59,7 @@ public class TcpServerWorker<Q extends Request, P extends Response> {
 	}
 
 	//TODO override
-	protected P handleRequest(Q request) {
+	public P handleRequest(Q request) {
 		return (P) new DefaultResponse("???");
-	}
-
-	private void closeQuietly(Closeable closeable) {
-		try {
-			if (closeable != null) {
-				closeable.close();
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 }

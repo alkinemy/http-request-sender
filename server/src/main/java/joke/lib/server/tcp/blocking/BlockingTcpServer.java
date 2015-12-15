@@ -1,8 +1,9 @@
-package joke.lib.server.tcp;
+package joke.lib.server.tcp.blocking;
 
 import joke.lib.message.request.Request;
 import joke.lib.message.request.parser.RequestParser;
 import joke.lib.message.response.Response;
+import joke.lib.server.Server;
 import lombok.Setter;
 
 import java.io.IOException;
@@ -12,7 +13,7 @@ import java.nio.charset.Charset;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class BlockingTcpServer<Q extends Request, P extends Response> {
+public class BlockingTcpServer<Q extends Request, P extends Response> implements Server {
 
 	public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
 
@@ -28,7 +29,7 @@ public class BlockingTcpServer<Q extends Request, P extends Response> {
 		this.parser = parser;
 	}
 
-	public void start() {
+	@Override public void start() {
 		try(ServerSocket serverSocket = new ServerSocket(port)) {
 			while(true) {
 				Socket socket = serverSocket.accept();
@@ -41,6 +42,6 @@ public class BlockingTcpServer<Q extends Request, P extends Response> {
 
 	//TODO override
 	protected Thread createWorkerThread(Socket socket) {
-		return new Thread(() -> new TcpServerWorker<Q, P>(parser).work(socket));
+		return new Thread(() -> new BlockingTcpServerWorker<Q, P>(parser).work(socket));
 	}
 }
