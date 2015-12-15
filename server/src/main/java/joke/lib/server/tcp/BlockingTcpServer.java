@@ -9,10 +9,14 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.charset.Charset;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BlockingTcpServer<Q extends Request, P extends Response> {
 
 	public static final Charset DEFAULT_CHARSET = Charset.forName("UTF-8");
+
+	private static final ExecutorService THREAD_POOL = Executors.newFixedThreadPool(100);
 
 	private final int port;
 
@@ -28,8 +32,7 @@ public class BlockingTcpServer<Q extends Request, P extends Response> {
 		try(ServerSocket serverSocket = new ServerSocket(port)) {
 			while(true) {
 				Socket socket = serverSocket.accept();
-				Thread thread = createWorkerThread(socket);
-				thread.start();
+				THREAD_POOL.execute(createWorkerThread(socket));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
