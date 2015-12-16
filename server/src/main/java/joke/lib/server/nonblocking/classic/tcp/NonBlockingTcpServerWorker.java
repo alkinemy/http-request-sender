@@ -6,6 +6,7 @@ import joke.lib.message.response.DefaultResponse;
 import joke.lib.message.response.Response;
 import joke.lib.server.ServerWorker;
 import joke.lib.server.blocking.tcp.BlockingTcpServer;
+import joke.lib.server.nonblocking.classic.SocketChannelWrapper;
 import joke.lib.util.CloseableUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -21,13 +22,14 @@ public class NonBlockingTcpServerWorker<Q extends Request, P extends Response> i
 		this.parser = parser;
 	}
 
-	public void work(SocketChannel socketChannel) {
+	public void work(SocketChannelWrapper socketChannel) {
 		try {
-			String input = read(socketChannel);
+			String input = read(socketChannel.getSocketChannel());
 			if (input.isEmpty()) {
 				if(shouldSocketBeClosedWhenRequestIsEnded()) {
 					socketChannel.close();
 				}
+				socketChannel.setInProgress(false);
 				return;
 			}
 
@@ -39,12 +41,14 @@ public class NonBlockingTcpServerWorker<Q extends Request, P extends Response> i
 			if (shouldSocketBeClosedWhenRequestIsEnded()) {
 				socketChannel.close();
 			}
+			socketChannel.setInProgress(false);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
 			if (shouldSocketBeClosedWhenRequestIsEnded()) {
 				CloseableUtils.closeQuietly(socketChannel);
 			}
+			socketChannel.setInProgress(false);
 		}
 	}
 

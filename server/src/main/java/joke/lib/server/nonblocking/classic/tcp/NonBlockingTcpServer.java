@@ -4,7 +4,9 @@ import joke.lib.message.request.Request;
 import joke.lib.message.request.parser.RequestParser;
 import joke.lib.message.response.Response;
 import joke.lib.server.Server;
+import joke.lib.server.nonblocking.classic.SocketChannelWrapper;
 
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.ServerSocketChannel;
@@ -15,13 +17,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class NonBlockingTcpServer<Q extends Request, P extends Response> implements Server {
+public class NonBlockingTcpServer<Q extends Request, P extends Response> implements Server, Closeable {
 	private static final ExecutorService THREAD_POOL = Executors.newFixedThreadPool(100);
 
 	protected RequestParser<Q> parser;
 	private final int port;
 
-	private volatile List<SocketChannel> channels = new CopyOnWriteArrayList<>();
+	private volatile List<SocketChannelWrapper> channels = new CopyOnWriteArrayList<>();
 
 	public NonBlockingTcpServer(int port, RequestParser<Q> parser) {
 		this.port = port;
@@ -41,10 +43,8 @@ public class NonBlockingTcpServer<Q extends Request, P extends Response> impleme
 							continue;
 						}
 
-						System.out.println("Socket channel connected");
-
 						socketChannel.configureBlocking(false);
-						channels.add(socketChannel);
+						channels.add(SocketChannelWrapper.wrap(socketChannel));
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -53,21 +53,50 @@ public class NonBlockingTcpServer<Q extends Request, P extends Response> impleme
 
 			Thread readingConnectedSocketsWorker = new Thread(() -> {
 				while(true) {
-					Iterator<SocketChannel> iterator = channels.iterator();
+//					for(SocketChannelWrapper channel : channels) {
+//						if (channel.isConnected()) {
+//							if (!channel.isInProgress()) {
+//								channel.setInProgress(true);
+//								THREAD_POOL.execute(createServerWorker(channel));
+//							}
+//						} else {
+//							if (!channel.isInProgress()) {
+//								channels.remove(channel);
+//							}
+//						}
+//					}
+
+					Iterator<SocketChannelWrapper> iterator = channels.iterator();
 					while (iterator.hasNext()) {
-						SocketChannel socketChannel = iterator.next();
+						SocketChannelWrapper socketChannel = iterator.next();
 						if (socketChannel.isConnected()) {
-							THREAD_POOL.execute(createServerWorker(socketChannel));
+							if (!socketChannel.isInProgress()) {
+								socketChannel.setInProgress(true);
+								THREAD_POOL.execute(createServerWorker(socketChannel));
+							}
 						} else {
-							channels.remove(socketChannel);
-							System.out.println("Socket channel closed");
+							if (!socketChannel.isInProgress()) {
+								channels.remove(socketChannel);
+							}
 						}
 					}
 				}
 			});
 
+//			Thread countSocketChannel = new Thread(() -> {
+//				while(true) {
+//					try {
+//						System.out.println("Socket count: " + channels.size());
+//						Thread.sleep(1000);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//				}
+//			});
+
 			acceptingConnectionWorker.start();
 			readingConnectedSocketsWorker.start();
+//			countSocketChannel.start();
 
 			while(true) {
 				//계속 실행되게 하기 위함
@@ -77,7 +106,12 @@ public class NonBlockingTcpServer<Q extends Request, P extends Response> impleme
 		}
 	}
 
-	protected Runnable createServerWorker(SocketChannel socketChannel) {
+	protected Runnable createServerWorker(SocketChannelWrapper socketChannel) {
 		return () -> new NonBlockingTcpServerWorker<Q, P>(parser).work(socketChannel);
+	}
+
+	@Override public void close() throws IOException {
+		THREAD_POOL.shutdown();
+		//열린 소켓 닫기
 	}
 }
