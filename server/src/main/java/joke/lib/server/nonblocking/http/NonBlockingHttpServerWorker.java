@@ -1,21 +1,19 @@
-package joke.lib.server.http.blocking;
+package joke.lib.server.nonblocking.http;
 
 import joke.lib.message.request.http.HttpRequest;
 import joke.lib.message.request.parser.RequestParser;
 import joke.lib.message.response.http.HttpResponse;
 import joke.lib.message.response.http.startline.HttpStatus;
-import joke.lib.server.tcp.blocking.BlockingTcpServer;
-import joke.lib.server.tcp.blocking.BlockingTcpServerWorker;
+import joke.lib.server.nonblocking.tcp.NonBlockingTcpServerWorker;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.net.URL;
-import java.util.Arrays;
 
-public class BlockingHttpServerWorker extends BlockingTcpServerWorker<HttpRequest, HttpResponse> {
-
-	private static final int[] END_PATTERN = new int[] {13, 10, 13, 10};
-
-	public BlockingHttpServerWorker(RequestParser<HttpRequest> parser) {
+public class NonBlockingHttpServerWorker extends NonBlockingTcpServerWorker<HttpRequest, HttpResponse> {
+	public NonBlockingHttpServerWorker(RequestParser<HttpRequest> parser) {
 		super(parser);
 	}
 
@@ -55,31 +53,5 @@ public class BlockingHttpServerWorker extends BlockingTcpServerWorker<HttpReques
 				.payload(exception.getMessage())
 				.build();
 		}
-	}
-
-	@Override protected String read(InputStream socketInputStream) throws IOException {
-		try (ByteArrayOutputStream requestOutputStream = new ByteArrayOutputStream()) {
-			int current;
-			int[] pattern = new int[4];
-			while ((current = socketInputStream.read()) != -1) {
-				requestOutputStream.write(current);
-
-				pattern = shiftLeftAndAppend(pattern, current);
-				if (Arrays.equals(END_PATTERN, pattern)) {
-					break;
-				}
-			}
-
-			return new String(requestOutputStream.toByteArray(), BlockingTcpServer.DEFAULT_CHARSET);
-		}
-	}
-
-	private int[] shiftLeftAndAppend(int[] pattern, int data) {
-		int[] newPattern = new int[4];
-		newPattern[0] = pattern[1];
-		newPattern[1] = pattern[2];
-		newPattern[2] = pattern[3];
-		newPattern[3] = data;
-		return newPattern;
 	}
 }

@@ -1,9 +1,9 @@
-package joke.lib.server.http.blocking;
+package joke.lib.server.blocking.http;
 
 import joke.lib.message.request.http.HttpRequest;
 import joke.lib.message.request.parser.HttpRequestParser;
 import joke.lib.message.response.http.HttpResponse;
-import joke.lib.server.tcp.blocking.BlockingTcpServer;
+import joke.lib.server.blocking.tcp.BlockingTcpServer;
 
 import java.net.Socket;
 

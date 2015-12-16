@@ -1,9 +1,9 @@
-package joke.lib.server.http.nonblocking;
+package joke.lib.server.nonblocking.http;
 
 import joke.lib.message.request.http.HttpRequest;
 import joke.lib.message.request.parser.HttpRequestParser;
 import joke.lib.message.response.http.HttpResponse;
-import joke.lib.server.tcp.nonblocking.NonBlockingTcpServer;
+import joke.lib.server.nonblocking.tcp.NonBlockingTcpServer;
 
 import java.nio.channels.SocketChannel;
 

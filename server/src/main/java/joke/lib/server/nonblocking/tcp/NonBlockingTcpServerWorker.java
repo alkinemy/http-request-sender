@@ -1,11 +1,11 @@
-package joke.lib.server.tcp.nonblocking;
+package joke.lib.server.nonblocking.tcp;
 
 import joke.lib.message.request.Request;
 import joke.lib.message.request.parser.RequestParser;
 import joke.lib.message.response.DefaultResponse;
 import joke.lib.message.response.Response;
 import joke.lib.server.ServerWorker;
-import joke.lib.server.tcp.blocking.BlockingTcpServer;
+import joke.lib.server.blocking.tcp.BlockingTcpServer;
 import joke.lib.util.CloseableUtils;
 
 import java.io.ByteArrayOutputStream;

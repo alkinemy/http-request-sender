@@ -1,4 +1,4 @@
-package joke.lib.server.tcp.blocking;
+package joke.lib.server.blocking.tcp;
 
 import joke.lib.message.request.Request;
 import joke.lib.message.request.parser.RequestParser;
