@@ -14,11 +14,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public class NonBlockingTcpServerWorker<Q extends Request, P extends Response> implements ServerWorker<Q, P> {
+public class NonBlockingClassicTcpServerWorker<Q extends Request, P extends Response> implements ServerWorker<Q, P> {
 
 	private final RequestParser<Q> parser;
 
-	public NonBlockingTcpServerWorker(RequestParser<Q> parser) {
+	public NonBlockingClassicTcpServerWorker(RequestParser<Q> parser) {
 		this.parser = parser;
 	}
 

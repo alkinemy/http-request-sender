@@ -17,7 +17,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class NonBlockingTcpServer<Q extends Request, P extends Response> implements Server, Closeable {
+public class NonBlockingClassicTcpServer<Q extends Request, P extends Response> implements Server, Closeable {
 	private static final ExecutorService THREAD_POOL = Executors.newFixedThreadPool(100);
 
 	protected RequestParser<Q> parser;
@@ -25,7 +25,7 @@ public class NonBlockingTcpServer<Q extends Request, P extends Response> impleme
 
 	private volatile List<SocketChannelWrapper> channels = new CopyOnWriteArrayList<>();
 
-	public NonBlockingTcpServer(int port, RequestParser<Q> parser) {
+	public NonBlockingClassicTcpServer(int port, RequestParser<Q> parser) {
 		this.port = port;
 		this.parser = parser;
 	}
@@ -107,7 +107,7 @@ public class NonBlockingTcpServer<Q extends Request, P extends Response> impleme
 	}
 
 	protected Runnable createServerWorker(SocketChannelWrapper socketChannel) {
-		return () -> new NonBlockingTcpServerWorker<Q, P>(parser).work(socketChannel);
+		return () -> new NonBlockingClassicTcpServerWorker<Q, P>(parser).work(socketChannel);
 	}
 
 	@Override public void close() throws IOException {

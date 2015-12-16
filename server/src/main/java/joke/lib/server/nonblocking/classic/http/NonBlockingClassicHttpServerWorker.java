@@ -4,7 +4,7 @@ import joke.lib.message.request.http.HttpRequest;
 import joke.lib.message.request.parser.RequestParser;
 import joke.lib.message.response.http.HttpResponse;
 import joke.lib.message.response.http.startline.HttpStatus;
-import joke.lib.server.nonblocking.classic.tcp.NonBlockingTcpServerWorker;
+import joke.lib.server.nonblocking.classic.tcp.NonBlockingClassicTcpServerWorker;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -12,8 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.net.URL;
 
-public class NonBlockingHttpServerWorker extends NonBlockingTcpServerWorker<HttpRequest, HttpResponse> {
-	public NonBlockingHttpServerWorker(RequestParser<HttpRequest> parser) {
+public class NonBlockingClassicHttpServerWorker extends NonBlockingClassicTcpServerWorker<HttpRequest, HttpResponse> {
+	public NonBlockingClassicHttpServerWorker(RequestParser<HttpRequest> parser) {
 		super(parser);
 	}
 
