@@ -29,15 +29,14 @@ public class NonBlockingTcpServer<Q extends Request, P extends Response> impleme
 			serverSocketChannel.configureBlocking(false);
 
 			while(true) {
-				try(SocketChannel socketChannel = serverSocketChannel.accept()) {
-					if (socketChannel == null) {
-						//뭔가를 해야하나?
-						continue;
-					}
-
-					socketChannel.configureBlocking(false);
-					THREAD_POOL.execute(createWorkerThread(socketChannel));
+				SocketChannel socketChannel = serverSocketChannel.accept();
+				if (socketChannel == null) {
+					//뭔가를 해야하나?
+					continue;
 				}
+
+				socketChannel.configureBlocking(false);
+				THREAD_POOL.execute(createWorkerThread(socketChannel));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

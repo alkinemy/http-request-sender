@@ -46,7 +46,7 @@ public class NonBlockingTcpServerWorker<Q extends Request, P extends Response> i
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 			ByteBuffer buffer = ByteBuffer.allocate(1024);
 			int count;
-			while ((count = socketChannel.read(buffer)) != -1) {
+			while ((count = socketChannel.read(buffer)) > 0) {
 				buffer.flip();
 				outputStream.write(buffer.array(), 0, count);
 				buffer.clear();
