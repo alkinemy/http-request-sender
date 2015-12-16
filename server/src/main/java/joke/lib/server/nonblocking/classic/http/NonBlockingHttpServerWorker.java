@@ -1,10 +1,10 @@
-package joke.lib.server.nonblocking.http;
+package joke.lib.server.nonblocking.classic.http;
 
 import joke.lib.message.request.http.HttpRequest;
 import joke.lib.message.request.parser.RequestParser;
 import joke.lib.message.response.http.HttpResponse;
 import joke.lib.message.response.http.startline.HttpStatus;
-import joke.lib.server.nonblocking.tcp.NonBlockingTcpServerWorker;
+import joke.lib.server.nonblocking.classic.tcp.NonBlockingTcpServerWorker;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -53,5 +53,10 @@ public class NonBlockingHttpServerWorker extends NonBlockingTcpServerWorker<Http
 				.payload(exception.getMessage())
 				.build();
 		}
+	}
+
+	@Override
+	protected boolean shouldSocketBeClosedWhenRequestIsEnded() {
+		return true;
 	}
 }

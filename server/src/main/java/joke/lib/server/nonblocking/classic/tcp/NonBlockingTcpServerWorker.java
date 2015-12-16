@@ -1,4 +1,4 @@
-package joke.lib.server.nonblocking.tcp;
+package joke.lib.server.nonblocking.classic.tcp;
 
 import joke.lib.message.request.Request;
 import joke.lib.message.request.parser.RequestParser;
@@ -25,7 +25,9 @@ public class NonBlockingTcpServerWorker<Q extends Request, P extends Response> i
 		try {
 			String input = read(socketChannel);
 			if (input.isEmpty()) {
-				socketChannel.close();
+				if(shouldSocketBeClosedWhenRequestIsEnded()) {
+					socketChannel.close();
+				}
 				return;
 			}
 
@@ -34,11 +36,15 @@ public class NonBlockingTcpServerWorker<Q extends Request, P extends Response> i
 			P response = handleRequest(request);
 			socketChannel.write(ByteBuffer.wrap(response.getMessage().getBytes()));
 
-			socketChannel.close();
+			if (shouldSocketBeClosedWhenRequestIsEnded()) {
+				socketChannel.close();
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
-			CloseableUtils.closeQuietly(socketChannel);
+			if (shouldSocketBeClosedWhenRequestIsEnded()) {
+				CloseableUtils.closeQuietly(socketChannel);
+			}
 		}
 	}
 
@@ -57,5 +63,9 @@ public class NonBlockingTcpServerWorker<Q extends Request, P extends Response> i
 
 	public P handleRequest(Q request) {
 		return (P) new DefaultResponse("???");
+	}
+
+	protected boolean shouldSocketBeClosedWhenRequestIsEnded() {
+		return false;
 	}
 }

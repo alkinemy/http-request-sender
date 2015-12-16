@@ -1,6 +1,7 @@
 package joke.example;
 
-import joke.lib.server.nonblocking.http.NonBlockingHttpServer;
+import joke.lib.server.nonblocking.classic.NonBlockingHttpServer;
+import joke.lib.server.nonblocking.classic.http.NonBlockingHttpServer;
 
 public class NonBlockingServer {
 
